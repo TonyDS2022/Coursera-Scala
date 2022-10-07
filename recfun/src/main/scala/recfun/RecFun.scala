@@ -29,9 +29,33 @@ object RecFun extends RecFunInterface:
   /**
    * Exercise 2
    */
-  def balance(chars: List[Char]): Boolean = ???
+  def balance(chars: List[Char]): Boolean =
+    @tailrec
+    def balance_tailrec(chars: List[Char], open: Int): Boolean =
+      if chars.isEmpty then
+        open == 0
+      else
+        val new_open: Int = chars.head match {
+          case '(' => open + 1
+          case ')' => open - 1
+          case  _  => open
+        }
+        if new_open < 0 then false
+        else balance_tailrec(chars.tail, new_open)
+    balance_tailrec(chars, 0)
 
   /**
    * Exercise 3
    */
-  def countChange(money: Int, coins: List[Int]): Int = ???
+  def countChange(money: Int, coins: List[Int]): Int =
+    def count_rec(coins: List[Int], sum: Int, cnt: Int): Int =
+      if coins.isEmpty then
+        cnt
+      else
+        if sum > 0 then
+          count_rec(coins, sum - coins.head, cnt) + count_rec(coins.tail, sum, cnt)
+        else
+          if sum == 0 then
+            cnt + 1
+          else cnt
+    count_rec(coins.sorted, money, 0)
