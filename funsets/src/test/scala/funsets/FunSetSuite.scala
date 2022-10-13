@@ -36,6 +36,7 @@ class FunSetSuite extends munit.FunSuite:
     val s1 = singletonSet(1)
     val s2 = singletonSet(2)
     val s3 = singletonSet(3)
+    val s4 = singletonSet(1001)
 
   /**
    * This test is currently disabled (by using @Ignore) because the method
@@ -44,7 +45,7 @@ class FunSetSuite extends munit.FunSuite:
    * Once you finish your implementation of "singletonSet", remove the
    * .ignore annotation.
    */
-  test("singleton set one contains one".ignore) {
+  test("singleton set one contains one") {
 
     /**
      * We create a new instance of the "TestSets" trait, this gives us access
@@ -66,7 +67,23 @@ class FunSetSuite extends munit.FunSuite:
       assert(!contains(s, 3), "Union 3")
   }
 
+  test("all even numbers plus 2 yield even numbers") {
+    val even: FunSet = x => x % 2 == 0
+    assert(forall(even, x => even(x + 2)))
+  }
 
+  test("no bounded number exists in singleton set four") {
+    new TestSets:
+      assert(exists(s1, x => true))
+      assert(!exists(s2, x => x != 2))
+      assert(!exists(s4, x => true))
+  }
+
+  test("integer set is closed under addition") {
+    val N: FunSet = x => x.isInstanceOf[Int]
+    val M: FunSet = map(N, x => x + 1)
+    assert(forall(M, N))
+  }
 
   import scala.concurrent.duration.*
   override val munitTimeout = 10.seconds
